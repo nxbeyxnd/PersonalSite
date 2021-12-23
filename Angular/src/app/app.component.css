@@ -1,0 +1,35 @@
+.back{
+  background: linear-gradient(blueviolet, pink, white);
+  position: fixed;
+  width: 100%;
+  height: 100%;
+}
+
+.image{
+  width: 50px;
+}
+
+.center{
+  text-align: center;
+  vertical-align: center;
+}
+
+.photoBack{
+  background: rgba(0, 10, 0, 0.2);
+}
+
+.blockImgLinks{
+  padding: 1%;
+  display: flex;
+  align-items: center;
+  flex-flow: row;
+  justify-content: space-around;
+  border-radius: 50px;
+  border-color: black;
+  border-style: dashed;
+}
+
+.card{
+
+}
+
