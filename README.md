@@ -1,2 +1,3 @@
 # PersonalSite
-My first Personal site just for fun.
+Сайт для демонстрации навыков программирования на java
++ рабочий стек
