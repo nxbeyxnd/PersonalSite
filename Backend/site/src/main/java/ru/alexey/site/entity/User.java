@@ -13,7 +13,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQUENCE_GENERATOR_USER)
-    @SequenceGenerator(name = SEQUENCE_GENERATOR_USER, sequenceName = SEQUENCE_GENERATOR_USER, allocationSize = 100)
+    @SequenceGenerator(name = SEQUENCE_GENERATOR_USER, sequenceName = SEQUENCE_GENERATOR_USER, allocationSize = 1)
     @Column(name = "ID")
     private long id;
 
@@ -22,7 +22,6 @@ public class User {
 
     @Column(name = "PASSWORD")
     private String password;
-
 
     @ManyToOne
     @JoinColumn(
@@ -46,6 +45,31 @@ public class User {
 
     public Boolean getEnabled() {
         return enabled;
+    }
+
+    public static Builder newBuilder() {
+        return new User().new Builder();
+    }
+
+    public class Builder {
+        public Builder setUsername(String username) {
+            User.this.username = username;
+            return this;
+        }
+
+        public Builder setPassword(String password) {
+            User.this.password = password;
+            return this;
+        }
+
+        public Builder setRole(Role role) {
+            User.this.role = role;
+            return this;
+        }
+
+        public User build() {
+            return new User(username, password, role);
+        }
     }
 
     public void setEnabled(Boolean enabled) {

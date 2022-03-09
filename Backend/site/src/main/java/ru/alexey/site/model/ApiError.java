@@ -5,6 +5,7 @@ package ru.alexey.site.model;
 
 import java.util.Date;
 
+//We can use "record" but need JDK 16
 public class ApiError {
     private int code;
     private String message;
