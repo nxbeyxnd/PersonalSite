@@ -5,8 +5,12 @@ package ru.alexey.site.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.alexey.site.dto.UserRegisterRequestDto;
+import ru.alexey.site.dto.UserResponseDto;
 import ru.alexey.site.entity.User;
 import ru.alexey.site.service.UserService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/user")
@@ -17,19 +21,18 @@ public class MainController {
         this.userService = userService;
     }
 
+    @GetMapping(path = "")
+    public ResponseEntity<List<UserResponseDto>> findAllUsers() {
+        return ResponseEntity.ok(userService.findAll());
+    }
+
     @GetMapping(path = "{id}")
-    public ResponseEntity<User> showUser(@PathVariable(name = "id") Long id){
+    public ResponseEntity<User> findUserById(@PathVariable(name = "id") Long id) {
         return ResponseEntity.ok(userService.findById(id));
     }
 
-    @GetMapping(path = "admin")
-    public ResponseEntity<String> showAdmin(){
-        return ResponseEntity.ok("ADMIN");
+    @PostMapping(path = "")
+    public ResponseEntity<UserResponseDto> addNewUser(@RequestBody UserRegisterRequestDto userRegisterRequestDto) {
+        return ResponseEntity.ok(userService.addNewUser(userRegisterRequestDto));
     }
-
-    @GetMapping(path = "feed")
-    public ResponseEntity<String> showUser(){
-        return ResponseEntity.ok("USER");
-    }
-
 }

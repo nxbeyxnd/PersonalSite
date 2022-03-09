@@ -3,6 +3,7 @@ package ru.alexey.site.configuration;
 03.03.2022: Alexey created this file inside the package: ru.alexey.site.configuration 
 */
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -21,6 +22,9 @@ import static ru.alexey.site.configuration.ApplicationUserRole.USER;
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final PasswordEncoder passwordEncoder;
+
+    @Value("${app-path}")
+    private String CONTEXT_PATH;
 
     public SecurityConfiguration(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
@@ -48,9 +52,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers("/api/v1/user/admin/**").hasRole(ADMIN.name())
-                .mvcMatchers("**/feed").hasRole(USER.name())
+        http.csrf().disable()
+                .authorizeRequests()
+                .antMatchers(CONTEXT_PATH + "user/admin/**").hasRole(ADMIN.name())
+                .mvcMatchers(CONTEXT_PATH + "user/feed").hasRole(USER.name())
                 .and().formLogin().permitAll();
     }
 

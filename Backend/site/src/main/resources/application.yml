@@ -1,7 +1,7 @@
 server:
   port: 8190
   servlet:
-    context-path: "/app"
+    context-path: ""
 spring:
   datasource:
     driver-class-name: org.h2.Driver
@@ -19,4 +19,6 @@ spring:
       enabled: true
       settings:
         web-allow-others: false
+
+app-path: /api/v1/
 
