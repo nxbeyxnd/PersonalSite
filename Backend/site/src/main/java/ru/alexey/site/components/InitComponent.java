@@ -11,6 +11,7 @@ import ru.alexey.site.entity.User;
 import ru.alexey.site.repository.RoleRepository;
 import ru.alexey.site.repository.UserRepository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,9 +34,36 @@ public class InitComponent implements ApplicationListener<ContextRefreshedEvent>
         roles.add(new Role("USER"));
         roleRepository.saveAll(roles);
         List<User> users = new ArrayList<>();
-        users.add(new User("admin", "100", roleRepository.getById(1L)));
-        users.add(new User("moder", "100", roleRepository.getById(2L)));
-        users.add(new User("user", "100", roleRepository.getById(3L)));
+        users.add(
+                new User(
+                        "admin",
+                        "100",
+                        roleRepository.getById(1L),
+                        "admin@gmail.com",
+                        LocalDateTime.now(),
+                        LocalDateTime.now()
+                )
+        );
+        users.add(
+                new User(
+                        "moder",
+                        "100",
+                        roleRepository.getById(2L),
+                        "moder@gmail.com",
+                        LocalDateTime.now(),
+                        LocalDateTime.now()
+                )
+        );
+        users.add(
+                new User(
+                        "user",
+                        "100",
+                        roleRepository.getById(3L),
+                        "user@gmail.com",
+                        LocalDateTime.now(),
+                        LocalDateTime.now()
+                )
+        );
         userRepository.saveAll(users);
     }
 }

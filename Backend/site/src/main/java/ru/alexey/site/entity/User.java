@@ -4,6 +4,7 @@ package ru.alexey.site.entity;
 */
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = User.TABLE_USER)
@@ -14,14 +15,23 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQUENCE_GENERATOR_USER)
     @SequenceGenerator(name = SEQUENCE_GENERATOR_USER, sequenceName = SEQUENCE_GENERATOR_USER, allocationSize = 1)
-    @Column(name = "ID")
-    private long id;
+    @Column(name = "ID", nullable = false)
+    private Long id;
 
-    @Column(name = "USERNAME")
+    @Column(name = "USERNAME", nullable = false, columnDefinition = "VARCHAR")
     private String username;
 
-    @Column(name = "PASSWORD")
+    @Column(name = "PASSWORD", nullable = false, columnDefinition = "VARCHAR")
     private String password;
+
+    @Column(name = "Email", nullable = false)
+    private String email;
+
+    @Column(name = "CREATED_AT")
+    private LocalDateTime createdAt;
+
+    @Column(name = "CHANGED_AT")
+    private LocalDateTime changedAt;
 
     @ManyToOne
     @JoinColumn(
@@ -37,14 +47,13 @@ public class User {
     public User() {
     }
 
-    public User(String username, String password, Role role) {
+    public User(String username, String password, Role role, String email, LocalDateTime createdAt, LocalDateTime changedAt) {
         this.username = username;
         this.password = password;
+        this.email = email;
+        this.createdAt = createdAt;
+        this.changedAt = changedAt;
         this.role = role;
-    }
-
-    public Boolean getEnabled() {
-        return enabled;
     }
 
     public static Builder newBuilder() {
@@ -67,20 +76,31 @@ public class User {
             return this;
         }
 
+        public Builder setEmail(String email) {
+            User.this.email = email;
+            return this;
+        }
+
+        public Builder setCreatedAt(LocalDateTime createdAt) {
+            User.this.createdAt = createdAt;
+            return this;
+        }
+
+        public Builder setChangedAt(LocalDateTime changedAt) {
+            User.this.changedAt = changedAt;
+            return this;
+        }
+
         public User build() {
-            return new User(username, password, role);
+            return new User(username, password, role, email, createdAt, changedAt);
         }
     }
 
-    public void setEnabled(Boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -100,11 +120,35 @@ public class User {
         this.password = password;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public LocalDateTime getChangedAt() {
+        return changedAt;
+    }
+
+    public void setChangedAt(LocalDateTime changedAt) {
+        this.changedAt = changedAt;
+    }
+
     public Role getRole() {
         return role;
     }
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
 }

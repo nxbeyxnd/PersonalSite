@@ -14,10 +14,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/user")
-public class MainController {
+public class UserController {
     private final UserService userService;
 
-    public MainController(UserService userService) {
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
@@ -27,12 +27,24 @@ public class MainController {
     }
 
     @GetMapping(path = "{id}")
-    public ResponseEntity<User> findUserById(@PathVariable(name = "id") Long id) {
+    public ResponseEntity<UserResponseDto> findUserById(@PathVariable(name = "id") Long id) {
         return ResponseEntity.ok(userService.findById(id));
+    }
+
+    @PutMapping(path = "{id}")
+    public ResponseEntity<UserResponseDto> updateUserById(@PathVariable(name = "id") Long id,
+                                                          @RequestBody UserRegisterRequestDto userRegisterRequestDto) {
+        return ResponseEntity.ok(userService.update(id, userRegisterRequestDto));
     }
 
     @PostMapping(path = "")
     public ResponseEntity<UserResponseDto> addNewUser(@RequestBody UserRegisterRequestDto userRegisterRequestDto) {
-        return ResponseEntity.ok(userService.addNewUser(userRegisterRequestDto));
+        return ResponseEntity.ok(userService.save(userRegisterRequestDto));
+    }
+
+    @DeleteMapping(path = "{id}")
+    public ResponseEntity<User> removeUserById(@PathVariable(name = "id") long id) {
+        userService.removeUserById(id);
+        return ResponseEntity.noContent().build();
     }
 }
