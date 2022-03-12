@@ -3,15 +3,18 @@ package ru.alexey.site.dto;
 10.03.2022: Alexey created this file inside the package: ru.alexey.site.dto 
 */
 
+
 public class UserRegisterRequestDto {
     private String username;
     private String password;
     private String role;
+    private String email;
 
-    public UserRegisterRequestDto(String username, String password, String role) {
+    public UserRegisterRequestDto(String username, String password, String role, String email) {
         this.username = username;
         this.password = password;
         this.role = role;
+        this.email = email;
     }
 
     public String getUsername() {
@@ -36,5 +39,13 @@ public class UserRegisterRequestDto {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

@@ -7,7 +7,9 @@ public enum ApplicationUserPermission {
     USER_READ("user:read"),
     USER_WRITE("user:write"),
     POST_READ("post:read"),
-    POST_WRITE("post:write");
+    POST_WRITE("post:write"),
+    ROLE_READ("role:read"),
+    ROLE_WRITE("role:write");
 
 
     private final String permission;

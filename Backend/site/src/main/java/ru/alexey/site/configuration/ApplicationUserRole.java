@@ -11,7 +11,7 @@ import static ru.alexey.site.configuration.ApplicationUserPermission.*;
 public enum ApplicationUserRole {
     USER(Sets.newHashSet()),
     MODERATOR(Sets.newHashSet()),
-    ADMIN(Sets.newHashSet(POST_READ,POST_WRITE, USER_READ, USER_WRITE)),
+    ADMIN(Sets.newHashSet(POST_READ,POST_WRITE, USER_READ, USER_WRITE)), //FIXME: change permissions
     CREATOR(Sets.newHashSet());
 
     private final Set<ApplicationUserPermission> permissions;

@@ -5,14 +5,14 @@ package ru.alexey.site.service;
 
 import ru.alexey.site.dto.UserRegisterRequestDto;
 import ru.alexey.site.dto.UserResponseDto;
-import ru.alexey.site.entity.User;
 
 import java.util.List;
 
 public interface UserService{
     List<UserResponseDto> findAll();
-    User findById(Long id);
-    UserResponseDto addNewUser(UserRegisterRequestDto userRequest);
+    UserResponseDto findById(Long id);
+    UserResponseDto update(Long id, UserRegisterRequestDto userRequest);
+    UserResponseDto save(UserRegisterRequestDto userRequest);
     void removeUserById(long id);
 
 }
