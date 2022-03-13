@@ -42,7 +42,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post addNewPost(PostCreateRequestDto postCreateRequestDto) {
+    public PostResponseDto addNewPost(PostCreateRequestDto postCreateRequestDto) {
         if (postRepository.findPostByTitle(postCreateRequestDto.getTitle()).isPresent())
             throw new EntityAlreadyExistsException(String
                     .format("Post with title (%s) already exists", postCreateRequestDto.getTitle()));
@@ -55,7 +55,7 @@ public class PostServiceImpl implements PostService {
                 .setTags(addNewTags(postCreateRequestDto.getTags()))
                 .setUser(userService.findUserById(1L))
                 .build();
-        return postRepository.save(post);
+        return new PostResponseDto(postRepository.save(post));
     }
 
     @Override
@@ -68,20 +68,29 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post findById(Long id) {
-        return postRepository.findById(id).orElseThrow(
+    public PostResponseDto findById(Long id) {
+        return new PostResponseDto(postRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException(String.format("Post with id (%d) doesn't exists", id))
-        );
+        ));
     }
 
     @Override
-    public Post updatePost(PostCreateRequestDto postCreateRequestDto) {
-        return null;
+    public PostResponseDto updatePost(Long id, PostCreateRequestDto postCreateRequestDto) {
+        Post post = postRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException(String.format("Post with id (%d) doesn't exists", id))
+        );
+        post.setTitle(postCreateRequestDto.getTitle());
+        post.setText(postCreateRequestDto.getText());
+        post.setTags(addNewTags(postCreateRequestDto.getTags()));
+        return new PostResponseDto(postRepository.save(post));
     }
 
     @Override
     public void deletePostById(Long id) {
-
+        Post post = postRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException(String.format("Post with id (%d) doesn't exists", id))
+        );
+        postRepository.deleteById(post.getId());
     }
 
     private Set<Tag> addNewTags(String[] tags) {
