@@ -37,11 +37,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDto findById(Long id) {
+    public UserResponseDto findByIdAndCastToResponse(Long id) {
         return new UserResponseDto(userRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException(
                         String.format("User with id (%d) doesn't exists", id))));
     }
+
+    @Override
+    public User findUserById(Long id) {
+        return userRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException(
+                        String.format("User with id (%d) doesn't exists", id)));
+    }
+
 
     @Override
     public UserResponseDto update(Long id, UserRegisterRequestDto userRequest) {

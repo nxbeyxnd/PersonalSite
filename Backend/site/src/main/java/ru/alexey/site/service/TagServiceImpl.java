@@ -5,9 +5,10 @@ package ru.alexey.site.service;
 
 import org.springframework.stereotype.Service;
 import ru.alexey.site.entity.Tag;
-import ru.alexey.site.exception.EntityAlreadyExistsException;
 import ru.alexey.site.exception.EntityNotFoundException;
 import ru.alexey.site.repository.TagRepository;
+
+import java.util.Optional;
 
 @Service
 public class TagServiceImpl implements TagService {
@@ -26,11 +27,10 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public Tag addNewTag(String tagName) {
-        if (tagRepository.findByName(tagName).isPresent())
-            throw new EntityAlreadyExistsException(
-                    String.format("Tag with name (%s) already exists", tagName));
-        Tag tag = new Tag(tagName);
-        return tagRepository.save(tag);
+        Optional<Tag> tag = tagRepository.findByName(tagName);
+        if (tag.isPresent())
+            return tag.get();
+        return tagRepository.save(new Tag(tagName));
     }
 
     @Override

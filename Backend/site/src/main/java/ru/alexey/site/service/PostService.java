@@ -3,11 +3,14 @@ package ru.alexey.site.service;/*
 */
 
 import ru.alexey.site.dto.PostCreateRequestDto;
-import ru.alexey.site.entity.Post;
+import ru.alexey.site.dto.PostResponseDto;
+
+import java.util.List;
 
 public interface PostService {
-    Post addNewPost(PostCreateRequestDto postCreateRequestDto);
-    Post findByTitle(String title);
-    Post updatePost(PostCreateRequestDto postCreateRequestDto);
+    List<PostResponseDto> findAllPosts();
+    PostResponseDto findById(Long id);
+    PostResponseDto addNewPost(PostCreateRequestDto postCreateRequestDto);
+    PostResponseDto updatePost(Long id, PostCreateRequestDto postCreateRequestDto);
     void deletePostById(Long id);
 }
