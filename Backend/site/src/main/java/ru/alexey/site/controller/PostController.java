@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.alexey.site.dto.PostCreateRequestDto;
 import ru.alexey.site.dto.PostResponseDto;
-import ru.alexey.site.entity.Post;
 import ru.alexey.site.service.PostService;
 
 import java.util.List;
