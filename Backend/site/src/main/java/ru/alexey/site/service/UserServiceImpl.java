@@ -50,7 +50,6 @@ public class UserServiceImpl implements UserService {
                         String.format("User with id (%d) doesn't exists", id)));
     }
 
-
     @Override
     public UserResponseDto update(Long id, UserRegisterRequestDto userRequest) {
         Optional<User> user = userRepository.findById(id);
