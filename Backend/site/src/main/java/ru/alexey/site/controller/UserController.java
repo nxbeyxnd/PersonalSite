@@ -4,6 +4,7 @@ package ru.alexey.site.controller;
 */
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.alexey.site.dto.UserRegisterRequestDto;
 import ru.alexey.site.dto.UserResponseDto;
@@ -31,17 +32,20 @@ public class UserController {
         return ResponseEntity.ok(userService.findByIdAndCastToResponse(id));
     }
 
+    @PreAuthorize(value = "hasAuthority('user:write')")
     @PutMapping(path = "{id}")
     public ResponseEntity<UserResponseDto> updateUserById(@PathVariable(name = "id") Long id,
                                                           @RequestBody UserRegisterRequestDto userRegisterRequestDto) {
         return ResponseEntity.ok(userService.update(id, userRegisterRequestDto));
     }
 
+    @PreAuthorize(value = "hasAuthority('user:write')")
     @PostMapping(path = "")
     public ResponseEntity<UserResponseDto> addNewUser(@RequestBody UserRegisterRequestDto userRegisterRequestDto) {
         return ResponseEntity.ok(userService.save(userRegisterRequestDto));
     }
 
+    @PreAuthorize(value = "hasAuthority('user:write')")
     @DeleteMapping(path = "{id}")
     public ResponseEntity<User> removeUserById(@PathVariable(name = "id") long id) {
         userService.removeUserById(id);

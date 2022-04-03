@@ -42,4 +42,16 @@ public class Role {
     public void setName(String role) {
         this.name = role;
     }
+
+    public class Builder {
+
+        public Builder setName(String name) {
+            Role.this.name = name;
+            return this;
+        }
+
+        public Role build() {
+            return new Role(name);
+        }
+    }
 }
