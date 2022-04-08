@@ -5,6 +5,8 @@ package ru.alexey.site.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.alexey.site.components.memento.PostMemento;
+import ru.alexey.site.components.memento.PostSessionHistory;
 import ru.alexey.site.dto.PostCreateRequestDto;
 import ru.alexey.site.dto.PostResponseDto;
 import ru.alexey.site.entity.Post;
@@ -22,6 +24,7 @@ import java.util.stream.Collectors;
 @Service
 public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
+    private final PostSessionHistory postSessionHistory;
     private TagService tagService;
     private UserService userService;
 
@@ -35,10 +38,11 @@ public class PostServiceImpl implements PostService {
         this.userService = userService;
     }
 
-    public PostServiceImpl(PostRepository postRepository, TagService tagService, UserService userService) {
+    public PostServiceImpl(PostRepository postRepository, TagService tagService, UserService userService, PostSessionHistory postSessionHistory) {
         this.postRepository = postRepository;
         this.tagService = tagService;
         this.userService = userService;
+        this.postSessionHistory = postSessionHistory;
     }
 
     @Override
@@ -79,9 +83,12 @@ public class PostServiceImpl implements PostService {
         Post post = postRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException(String.format("Post with id (%d) doesn't exists", id))
         );
+        postSessionHistory.save(post.saveState());
+
         post.setTitle(postCreateRequestDto.getTitle());
         post.setText(postCreateRequestDto.getText());
         post.setTags(addNewTags(postCreateRequestDto.getTags()));
+
         return new PostResponseDto(postRepository.save(post));
     }
 
@@ -99,5 +106,20 @@ public class PostServiceImpl implements PostService {
             setOfTags.add(tagService.addNewTag(s));
         }
         return setOfTags;
+    }
+
+    public PostResponseDto rollbackPost() {
+        PostMemento postMemento = postSessionHistory.load().orElseThrow(() ->
+                new EntityNotFoundException("Queue is empty"));
+        Post post = Post.newBuilder()
+                .setId(postMemento.getId())
+                .setTitle(postMemento.getTitle())
+                .setText(postMemento.getText())
+                .setCreatedAt(postMemento.getCreatedAt())
+                .setUser(postMemento.getUser())
+                .setTags(postMemento.getTags())
+                .build();
+
+        return new PostResponseDto(postRepository.save(post));
     }
 }

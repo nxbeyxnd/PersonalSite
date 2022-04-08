@@ -64,18 +64,22 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+        http
+                .csrf()
+                .disable()
+//                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+//                .and()
                 .authorizeRequests()
-//                .antMatchers(CONTEXT_PATH + "user/admin/**").hasRole(ADMIN.name())
-//                .mvcMatchers(CONTEXT_PATH + "user/feed").hasRole(USER.name())
-//                .antMatchers(HttpMethod.GET, CONTEXT_PATH + "**")
-//                .hasAnyAuthority(
-//                        ApplicationUserPermission.USER_READ.getPermission(),
-//                        ApplicationUserPermission.ROLE_READ.getPermission())
                 .anyRequest()
                 .authenticated()
                 .and()
                 .httpBasic();
+//                .formLogin()
+//                .loginPage("/login")
+//                .permitAll()
+//                .defaultSuccessUrl("/feed", true)
+//                .and()
+//                .rememberMe();
     }
 
     @Override
