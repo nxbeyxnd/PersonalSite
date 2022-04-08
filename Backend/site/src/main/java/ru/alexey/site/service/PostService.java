@@ -9,8 +9,14 @@ import java.util.List;
 
 public interface PostService {
     List<PostResponseDto> findAllPosts();
+
     PostResponseDto findById(Long id);
+
     PostResponseDto addNewPost(PostCreateRequestDto postCreateRequestDto);
+
     PostResponseDto updatePost(Long id, PostCreateRequestDto postCreateRequestDto);
+
     void deletePostById(Long id);
+
+    PostResponseDto rollbackPost();
 }

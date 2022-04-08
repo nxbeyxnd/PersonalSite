@@ -4,6 +4,7 @@ package ru.alexey.site.entity;
 */
 
 import org.hibernate.annotations.Cascade;
+import ru.alexey.site.components.memento.PostMemento;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -72,7 +73,8 @@ public class Post {
     public Post() {
     }
 
-    public Post(String title, String text, LocalDateTime createdAt, User user, Set<Tag> tags) {
+    public Post(Long id, String title, String text, LocalDateTime createdAt, User user, Set<Tag> tags) {
+        this.id = id;
         this.title = title;
         this.text = text;
         this.createdAt = createdAt;
@@ -89,6 +91,11 @@ public class Post {
     }
 
     public class Builder {
+        public Builder setId(Long id) {
+            Post.this.id = id;
+            return this;
+        }
+
         public Builder setTitle(String title) {
             Post.this.title = title;
             return this;
@@ -115,7 +122,7 @@ public class Post {
         }
 
         public Post build() {
-            return new Post(title, text, createdAt, user, tags);
+            return new Post(id, title, text, createdAt, user, tags);
         }
     }
 
@@ -165,5 +172,18 @@ public class Post {
 
     public void setTags(Set<Tag> tags) {
         this.tags = tags;
+    }
+
+    public PostMemento saveState() {
+        return new PostMemento(this);
+    }
+
+    public void restoreState(PostMemento memento) {
+        this.id = memento.getId();
+        this.title = memento.getTitle();
+        this.text = memento.getText();
+        this.createdAt = memento.getCreatedAt();
+        this.user = memento.getUser();
+        this.tags = memento.getTags();
     }
 }

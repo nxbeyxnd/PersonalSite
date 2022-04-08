@@ -22,6 +22,7 @@ public class UserController {
         this.userService = userService;
     }
 
+    @PreAuthorize(value = "hasAuthority('user:read')")
     @GetMapping(path = "")
     public ResponseEntity<List<UserResponseDto>> findAllUsers() {
         return ResponseEntity.ok(userService.findAll());

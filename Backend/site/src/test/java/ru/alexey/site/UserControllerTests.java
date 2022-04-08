@@ -3,7 +3,6 @@ package ru.alexey.site;
 20.03.2022: Alexey created this file inside the package: ru.alexey.site 
 */
 
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
