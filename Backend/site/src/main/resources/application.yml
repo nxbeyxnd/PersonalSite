@@ -21,4 +21,5 @@ spring:
         web-allow-others: false
 
 app-path: /api/v1/
+key: secretKey
 
