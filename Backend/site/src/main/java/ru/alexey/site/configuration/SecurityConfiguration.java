@@ -16,6 +16,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+
+import java.util.concurrent.TimeUnit;
 
 import static ru.alexey.site.configuration.ApplicationUserRole.*;
 
@@ -28,6 +31,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Value("${app-path}")
     private String CONTEXT_PATH;
+    @Value("${key}")
+    private String KEY_SECRET;
 
     public SecurityConfiguration(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
@@ -73,13 +78,24 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .authenticated()
                 .and()
-                .httpBasic();
-//                .formLogin()
-//                .loginPage("/login")
-//                .permitAll()
-//                .defaultSuccessUrl("/feed", true)
-//                .and()
-//                .rememberMe();
+                .formLogin()
+                    .loginPage("/login")
+                    .permitAll()
+                    .defaultSuccessUrl("/feed", true)
+                    .usernameParameter("username")
+                    .passwordParameter("password")
+                .and()
+                .rememberMe()
+                    .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(7))
+                    .key(KEY_SECRET)
+                    .rememberMeParameter("remember-me")
+                .and()
+                    .logout()
+                    .logoutUrl("/logout")
+                    .clearAuthentication(true)
+                    .invalidateHttpSession(true)
+                    .deleteCookies("JSESSIONID", "XSRF-TOKEN", "remember-me")
+                    .logoutSuccessUrl("/login");
     }
 
     @Override
