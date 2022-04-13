@@ -9,6 +9,7 @@ import ru.alexey.site.dto.UserResponseDto;
 import ru.alexey.site.entity.User;
 import ru.alexey.site.exception.EntityAlreadyExistsException;
 import ru.alexey.site.exception.EntityNotFoundException;
+import ru.alexey.site.mapper.UserMapper;
 import ru.alexey.site.repository.RoleRepository;
 import ru.alexey.site.repository.UserRepository;
 
@@ -22,23 +23,25 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final UserMapper userMapper;
 
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.userMapper = userMapper;
     }
 
     @Override
     public List<UserResponseDto> findAll() {
         return userRepository.findAll()
                 .stream()
-                .map(UserResponseDto::new)
+                .map(userMapper::userResponseDtoView)
                 .collect(Collectors.toList());
     }
 
     @Override
     public UserResponseDto findByIdAndCastToResponse(Long id) {
-        return new UserResponseDto(userRepository.findById(id).orElseThrow(
+        return userMapper.userResponseDtoView(userRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException(
                         String.format("User with id (%d) doesn't exists", id))));
     }
@@ -63,7 +66,7 @@ public class UserServiceImpl implements UserService {
         user.get().setEmail(userRequest.getEmail());
         user.get().setPassword(userRequest.getPassword());
         user.get().setChangedAt(LocalDateTime.now());
-        return new UserResponseDto(userRepository.save(user.get()));
+        return userMapper.userResponseDtoView(userRepository.save(user.get()));
     }
 
     @Override
@@ -83,7 +86,7 @@ public class UserServiceImpl implements UserService {
                         .setCreatedAt(LocalDateTime.now())
                         .setChangedAt(LocalDateTime.now())
                         .build();
-        return new UserResponseDto(userRepository.save(user));
+        return userMapper.userResponseDtoView(userRepository.save(user));
     }
 
     @Override
