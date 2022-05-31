@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Table(name = Role.TABLE_ROLE)
 public class Role {
     static final String TABLE_ROLE = "ROLES";
-    private static final String SEQUENCE_GENERATOR_ROLE = TABLE_ROLE + "_seq";
+    private static final String SEQUENCE_GENERATOR_ROLE = TABLE_ROLE + "_id_seq";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQUENCE_GENERATOR_ROLE)

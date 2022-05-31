@@ -10,7 +10,7 @@ import java.util.Set;
 @Table(name = Tag.TABLE_TAG)
 public class Tag {
     static final String TABLE_TAG = "TAGS";
-    private static final String SEQUENCE_GENERATOR_TAG = TABLE_TAG + "_seq";
+    private static final String SEQUENCE_GENERATOR_TAG = TABLE_TAG + "_id_seq";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQUENCE_GENERATOR_TAG)

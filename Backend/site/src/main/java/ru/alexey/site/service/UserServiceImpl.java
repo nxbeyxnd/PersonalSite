@@ -14,6 +14,7 @@ import ru.alexey.site.repository.RoleRepository;
 import ru.alexey.site.repository.UserRepository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -36,7 +37,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll()
                 .stream()
                 .map(userMapper::userResponseDtoView)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -90,6 +91,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> saveAll(List<User> users) {
+        List<User> toAdd = users.stream()
+                .filter(
+                        x -> checkEmailOnExists(x.getEmail()) && checkUsernameOnExists(x.getUsername()))
+                .toList();
+        userRepository.saveAll(toAdd);
+        return toAdd;
+    }
+
+    @Override
     public void removeUserById(long id) {
         User user = userRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException(
@@ -100,5 +111,9 @@ public class UserServiceImpl implements UserService {
 
     private boolean checkUsernameOnExists(String username) {
         return userRepository.findUserByUsername(username).isPresent();
+    }
+
+    private boolean checkEmailOnExists(String email) {
+        return userRepository.findUserByEmail(email).isPresent();
     }
 }

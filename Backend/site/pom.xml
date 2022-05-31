@@ -14,7 +14,7 @@
     <name>site</name>
     <description>site</description>
     <properties>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <guava.version>30.1.1-jre</guava.version>
         <junit-jupiter.version>5.8.2</junit-jupiter.version>
         <mapstruct.version>1.4.2.Final</mapstruct.version>
@@ -60,6 +60,12 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
+        </dependency>
+
+        <!-- DB migration -->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
         </dependency>
 
         <!-- Utils -->

@@ -11,6 +11,7 @@ import ru.alexey.site.dto.UserResponseDto;
 import ru.alexey.site.entity.User;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -58,6 +59,13 @@ public class UserServiceProxyImpl implements UserService {
         UserResponseDto user = userService.save(userRequest);
         cacheAll.put(user.getId(), user);
         return user;
+    }
+
+    //TODO finish that method
+    @Override
+    public List<User> saveAll(List<User> users) {
+        updateCache();
+        return Collections.emptyList();
     }
 
     @Override

@@ -10,6 +10,7 @@ import ru.alexey.site.entity.Role;
 import ru.alexey.site.entity.User;
 import ru.alexey.site.repository.RoleRepository;
 import ru.alexey.site.repository.UserRepository;
+import ru.alexey.site.service.UserService;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,11 +20,11 @@ import java.util.List;
 public class InitComponent implements ApplicationListener<ContextRefreshedEvent> {
 
     private final RoleRepository roleRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    public InitComponent(RoleRepository roleRepository, UserRepository userRepository) {
+    public InitComponent(RoleRepository roleRepository, UserService userService) {
         this.roleRepository = roleRepository;
-        this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     @Override
@@ -33,37 +34,39 @@ public class InitComponent implements ApplicationListener<ContextRefreshedEvent>
         roles.add(new Role("MODERATOR"));
         roles.add(new Role("USER"));
         roleRepository.saveAll(roles);
-        List<User> users = new ArrayList<>();
-        users.add(
-                new User(
-                        "admin",
-                        "100",
-                        roleRepository.getById(1L),
-                        "admin@gmail.com",
-                        LocalDateTime.now(),
-                        LocalDateTime.now()
-                )
-        );
-        users.add(
-                new User(
-                        "moder",
-                        "100",
-                        roleRepository.getById(2L),
-                        "moder@gmail.com",
-                        LocalDateTime.now(),
-                        LocalDateTime.now()
-                )
-        );
-        users.add(
-                new User(
-                        "user",
-                        "100",
-                        roleRepository.getById(3L),
-                        "user@gmail.com",
-                        LocalDateTime.now(),
-                        LocalDateTime.now()
-                )
-        );
-        userRepository.saveAll(users);
+        if (userService.findAll().size() < 3) {
+            List<User> users = new ArrayList<>();
+            users.add(
+                    new User(
+                            "admin",
+                            "100",
+                            roleRepository.getById(1L),
+                            "admin@gmail.com",
+                            LocalDateTime.now(),
+                            LocalDateTime.now()
+                    )
+            );
+            users.add(
+                    new User(
+                            "moder",
+                            "100",
+                            roleRepository.getById(2L),
+                            "moder@gmail.com",
+                            LocalDateTime.now(),
+                            LocalDateTime.now()
+                    )
+            );
+            users.add(
+                    new User(
+                            "user",
+                            "100",
+                            roleRepository.getById(3L),
+                            "user@gmail.com",
+                            LocalDateTime.now(),
+                            LocalDateTime.now()
+                    )
+            );
+            userService.saveAll(users);
+        }
     }
 }

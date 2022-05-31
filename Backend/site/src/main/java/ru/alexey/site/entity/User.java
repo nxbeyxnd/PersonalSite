@@ -11,7 +11,7 @@ import java.util.Objects;
 @Table(name = User.TABLE_USER)
 public class User {
     static final String TABLE_USER = "USERS";
-    private static final String SEQUENCE_GENERATOR_USER = TABLE_USER + "_seq";
+    private static final String SEQUENCE_GENERATOR_USER = TABLE_USER + "_id_seq";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQUENCE_GENERATOR_USER)
@@ -25,7 +25,7 @@ public class User {
     @Column(name = "PASSWORD", nullable = false, columnDefinition = "VARCHAR")
     private String password;
 
-    @Column(name = "Email", nullable = false)
+    @Column(name = "EMAIL", nullable = false)
     private String email;
 
     @Column(name = "CREATED_AT")

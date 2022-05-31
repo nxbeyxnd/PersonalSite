@@ -9,12 +9,19 @@ import ru.alexey.site.entity.User;
 
 import java.util.List;
 
-public interface UserService{
+public interface UserService {
     List<UserResponseDto> findAll();
+
     UserResponseDto findByIdAndCastToResponse(Long id);
+
     User findUserById(Long id);
+
     UserResponseDto update(Long id, UserRegisterRequestDto userRequest);
+
     UserResponseDto save(UserRegisterRequestDto userRequest);
+
+    List<User> saveAll(List<User> users);
+
     void removeUserById(long id);
 
 }

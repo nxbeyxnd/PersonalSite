@@ -14,7 +14,7 @@ import java.util.Set;
 @Table(name = Post.TABLE_POST)
 public class Post {
     static final String TABLE_POST = "POSTS";
-    private static final String SEQUENCE_GENERATOR_POST = TABLE_POST + "_seq";
+    private static final String SEQUENCE_GENERATOR_POST = TABLE_POST + "_id_seq";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQUENCE_GENERATOR_POST)
