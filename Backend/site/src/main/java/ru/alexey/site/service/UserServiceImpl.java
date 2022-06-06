@@ -3,9 +3,15 @@ package ru.alexey.site.service;
 06.03.2022: Alexey created this file inside the package: ru.alexey.site.service 
 */
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import ru.alexey.site.auth.CustomUserDetails;
 import ru.alexey.site.dto.UserRegisterRequestDto;
 import ru.alexey.site.dto.UserResponseDto;
+import ru.alexey.site.entity.Role;
 import ru.alexey.site.entity.User;
 import ru.alexey.site.exception.EntityAlreadyExistsException;
 import ru.alexey.site.exception.EntityNotFoundException;
@@ -14,10 +20,7 @@ import ru.alexey.site.repository.RoleRepository;
 import ru.alexey.site.repository.UserRepository;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -36,7 +39,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll()
                 .stream()
                 .map(userMapper::userResponseDtoView)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -51,6 +54,11 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException(
                         String.format("User with id (%d) doesn't exists", id)));
+    }
+
+    @Override
+    public Optional<User> findUserByUsername(String username) {
+        return Optional.empty();
     }
 
     @Override
@@ -90,6 +98,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> saveAll(List<User> users) {
+        List<User> toAdd = users.stream()
+                .filter(
+                        x -> checkEmailOnExists(x.getEmail()) && checkUsernameOnExists(x.getUsername()))
+                .toList();
+        userRepository.saveAll(toAdd);
+        return toAdd;
+    }
+
+    @Override
     public void removeUserById(long id) {
         User user = userRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException(
@@ -100,5 +118,22 @@ public class UserServiceImpl implements UserService {
 
     private boolean checkUsernameOnExists(String username) {
         return userRepository.findUserByUsername(username).isPresent();
+    }
+
+    private boolean checkEmailOnExists(String email) {
+        return userRepository.findUserByEmail(email).isPresent();
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findUserByUsername(username).orElseThrow(
+                () -> new EntityNotFoundException(
+                        String.format("Entity with username(%s) doesn't exists", username)));
+
+        return new CustomUserDetails(user);
+    }
+
+    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Role role) {
+        return Collections.singletonList(new SimpleGrantedAuthority(role.getName()));
     }
 }
