@@ -3,6 +3,7 @@ package ru.alexey.site.controller;
 06.03.2022: Alexey created this file inside the package: ru.alexey.site 
 */
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
-    public UserController(UserService userService) {
+    public UserController(@Qualifier(value = "Cache") UserService userService) {
         this.userService = userService;
     }
 

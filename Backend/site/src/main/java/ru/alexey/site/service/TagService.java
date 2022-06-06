@@ -6,7 +6,10 @@ import ru.alexey.site.entity.Tag;
 
 public interface TagService {
     Tag getTagByName(String tagName);
+
     Tag addNewTag(String tagName);
+
     Tag updateTag(Long id, String tagName);
+
     void deleteTagById(Long id);
 }

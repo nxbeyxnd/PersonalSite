@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import ru.alexey.site.configuration.ApplicationUserRole;
 import ru.alexey.site.controller.UserController;
 import ru.alexey.site.dto.UserRegisterRequestDto;
 import ru.alexey.site.dto.UserResponseDto;
@@ -29,7 +30,7 @@ class UserControllerTests {
 
     @BeforeAll
     static void init() {
-        Role role = new Role("test");
+        Role role = new Role(ApplicationUserRole.USER);
         User user = new User("test",
                 "test",
                 role,

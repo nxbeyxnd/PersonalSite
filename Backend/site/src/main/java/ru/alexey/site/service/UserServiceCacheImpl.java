@@ -4,25 +4,25 @@ package ru.alexey.site.service;
 */
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.alexey.site.dto.UserRegisterRequestDto;
 import ru.alexey.site.dto.UserResponseDto;
 import ru.alexey.site.entity.User;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
-@Service
-@Primary
-public class UserServiceProxyImpl implements UserService {
+@Service("Cache")
+public class UserServiceCacheImpl implements UserService {
     private final UserService userService;
 
     private final HashMap<Long, UserResponseDto> cacheAll = new HashMap<>();
 
-    public UserServiceProxyImpl(@Qualifier("userServiceImpl") UserService userService) {
+    public UserServiceCacheImpl(@Qualifier("userServiceImpl") UserService userService) {
         this.userService = userService;
     }
 
@@ -46,6 +46,11 @@ public class UserServiceProxyImpl implements UserService {
     }
 
     @Override
+    public Optional<User> findUserByUsername(String username) {
+        return Optional.empty();
+    }
+
+    @Override
     public UserResponseDto update(Long id, UserRegisterRequestDto userRequest) {
         updateCache();
         UserResponseDto user = userService.update(id, userRequest);
@@ -65,7 +70,8 @@ public class UserServiceProxyImpl implements UserService {
     @Override
     public List<User> saveAll(List<User> users) {
         updateCache();
-        return Collections.emptyList();
+//        users.stream().collect(Collectors.toMap(User::getId, Function.identity()));
+        return userService.saveAll(users);
     }
 
     @Override
@@ -80,5 +86,10 @@ public class UserServiceProxyImpl implements UserService {
             userService.findAll()
                     .forEach(x -> cacheAll.put(x.getId(), x));
         }
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userService.loadUserByUsername(username);
     }
 }

@@ -3,7 +3,7 @@ package ru.alexey.site.service;
 12.03.2022: Alexey created this file inside the package: ru.alexey.site.service 
 */
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.alexey.site.components.memento.PostMemento;
 import ru.alexey.site.components.memento.PostSessionHistory;
@@ -19,26 +19,18 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final PostSessionHistory postSessionHistory;
-    private TagService tagService;
-    private UserService userService;
+    private final TagService tagService;
+    private final UserService userService;
 
-    @Autowired
-    public void setTagService(TagService tagService) {
-        this.tagService = tagService;
-    }
-
-    @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
-
-    public PostServiceImpl(PostRepository postRepository, TagService tagService, UserService userService, PostSessionHistory postSessionHistory) {
+    public PostServiceImpl(PostRepository postRepository,
+                           TagService tagService,
+                           @Qualifier(value = "Cache") UserService userService,
+                           PostSessionHistory postSessionHistory) {
         this.postRepository = postRepository;
         this.tagService = tagService;
         this.userService = userService;
@@ -67,8 +59,7 @@ public class PostServiceImpl implements PostService {
         return postRepository.findAll()
                 .stream()
                 .map(
-                        PostResponseDto::new).collect(Collectors.toList()
-                );
+                        PostResponseDto::new).toList();
     }
 
     @Override
