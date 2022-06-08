@@ -48,3 +48,4 @@
 * Spring Security
 * Spring Data
 * PostgreSQL (H2 при разработке)
+* Flyway migration
